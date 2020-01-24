@@ -1,0 +1,15 @@
+
+ <%= form_for :user do |f| %>
+	<h1 class="h3 mb-3 font-weight-normal">Edit</h1>
+	<%=f.label :name, class: "sr-only"%>
+	<%=f.text_field :name, id: :user_name, class: "form-control", placeholder: "name" %>
+
+	<%=f.label :username, class: "sr-only"%>
+	<%=f.text_field :username, id: :user_username, class: "form-control", placeholder: "username" %>
+
+	<%= f.submit 'update' , class: "btn btn-lg btn-primary btn-block"%>
+<% end %>
+
+<br /><br /><br />
+<%= link_to "Show details", show_path, class: "btn btn-primary"%>
+<%= link_to "Logout", logout_path,  class: "btn btn-danger" %>

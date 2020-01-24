@@ -1,0 +1,9 @@
+<h5>Name: <%= @user['name'] %></h5>
+<h5>Username: <%= @user['username'] %></h5>
+<h5>Token: <%= @user['auth_token'] %></h5>
+
+
+
+<br /><br /><br />
+<%= link_to "edit", edit_path, class: "btn btn-primary" %>
+<%= link_to "Logout", logout_path,  class: "btn btn-danger" %>

@@ -1,0 +1,43 @@
+<!-- 
+<form class="form-signin">
+
+	<!-- <img class="mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> 
+	<h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
+	<label for="inputEmail" class="sr-only">Name</label>
+	<input type="text" id="inputEmail" class="form-control" placeholder="Name" required="" autofocus="">
+	<label for="inputPassword" class="sr-only">Username</label>
+	<input type="text" id="inputPassword" class="form-control" placeholder="Username" required="">
+	<label for="inputPassword" class="sr-only">Password</label>
+	<input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+	<label for="inputPassword" class="sr-only">Password_confirmation</label>
+	<input type="password" id="inputPassword" class="form-control" placeholder="Password_confirmation" required="">
+  	<button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+</form>
+ -->
+
+<%= form_with url: signup_path, local: true, method: :post, class: "form-signin"  do |f| %>
+	<h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
+	Name : 
+	<%=text_field(:user,:name) %>
+	<br />
+
+	username: <%=text_field(:user, :username) %>
+<br />
+
+	password: 
+	<%=password_field(:user, :password) %>
+
+<br />
+	password_confirm:
+	<%=password_field(:user, :password_confirmation) %>
+
+	<%= f.submit 'sign up' , class: "btn btn-lg btn-primary btn-block"%>
+<% end %>
+
+
+<br />
+
+<div class="row">
+
+Have registed already!!! <%= link_to "yes, get login", signin_path, class: "" %> now
+</div>
