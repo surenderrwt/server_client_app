@@ -1,18 +1,37 @@
+
+	# require 'net/http'
+	# require 'uri'
+	# API_URL = "http://localhost:4000"
+
+
+
+
+	## ------- To debug the controller ----------##
+
+
+	#  To print the value into console
+	#    puts @user.inspect
+	#
+	#
+	#  To output the responce and search the data
+	# debugger
+
 class UsersController < ApplicationController
 
 	 before_action :set_user, only: [:edit, :update, :destroy, :show ]
 
 	#before_action :authenticate, except: [ :index, :new, :create ]
 
-	require 'net/http'
-	require 'uri'
-	API_URL = "http://localhost:4000"
 
 
 	def index
-		uri = URI.join(API_URL, "/users")
-		res = Net::HTTP.get_response(uri)
+		res = Net::HTTP.get_response(UriCreaterServices.create_uri("/users"))
 		@users = JSON.parse(res.body)
+		# puts UriCreater.uri
+		# puts @suggestion = UriCreater.new(text: "/users").call
+		# uri = URI.join(API_URL, "/users")
+		# res = Net::HTTP.get_response(uri)
+		# @users = JSON.parse(res.body)
 		# res = Net::HTTP.get('http://localhost:4000', '/users')
 		# req = Net::HTTP::Get.new(BASE_URL)
 		# res = Net::HTTP.start(BASE_URL.hostname) {|http|
@@ -28,14 +47,20 @@ class UsersController < ApplicationController
 	end
 
 	def create
-		#res = Net::HTTP.post(BASE_URL, user_params.to_query)
-		uri = URI.join(API_URL, "/users")
 
-		res = Net::HTTP.post_form URI(uri), 
-			{"user[name]" => "#{params[:user][:name]}",
+		res = Net::HTTP.post_form(UriCreaterServices.create_uri("/users"),
+			 "user[name]" => "#{params[:user][:name]}",
 			 "user[username]" => "#{params[:user][:username]}", 
 			 "user[password]" => "#{params[:user][:password]}", 
-			 "user[password_confirmation]" => "#{params[:user][:password_confirmation]}" }
+			 "user[password_confirmation]" => "#{params[:user][:password_confirmation]}")
+		# #res = Net::HTTP.post(BASE_URL, user_params.to_query)
+		# uri = URI.join(API_URL, "/users")
+
+		# res = Net::HTTP.post_form URI(UriCreaterServices.create_uri("/users")), 
+		# 	{"user[name]" => "#{params[:user][:name]}",
+		# 	 "user[username]" => "#{params[:user][:username]}", 
+		# 	 "user[password]" => "#{params[:user][:password]}", 
+		# 	 "user[password_confirmation]" => "#{params[:user][:password_confirmation]}" }
 		#res = http.post(BASE_URL, user_params.to_query)
 		puts res.body if res.is_a?(Net::HTTPSuccess)
 		JSON.parse(res.body)
@@ -75,9 +100,10 @@ class UsersController < ApplicationController
 	# 	Edit function to fetch info from API
 	# 	this OpenStruct.new method is need to be explored	
 	def edit
-		id = @user["id"] 
+		id = @user["id"]
 		token = @user["auth_token"]
-		uri = URI.join(API_URL, "/users/#{id}")
+		puts uri = UriCreaterServices.create_uri("/users/#{id}") 
+		# uri URI.join(API_URL, "/users/#{id}")
 
 		req = Net::HTTP::Get.new(uri)
 		req['auth_token'] = token
@@ -95,9 +121,9 @@ class UsersController < ApplicationController
 
 	# Update Users name and username through API
 	def update
-		id = @user["id"] 
+		# id = @user["id"] 
 		token = @user["auth_token"]
-		uri = URI.join(API_URL, "/users/#{id}")
+		uri = UriCreaterServices.create_uri("/users/#{id}")
 		req = Net::HTTP::Put.new(uri)
 		req.set_form_data("user[name]" => "#{params[:user][:name]}", "user[username]"  => "#{params[:user][:username]}")
 		req['auth_token'] = token
@@ -123,8 +149,8 @@ class UsersController < ApplicationController
 	end
 
 	def user_login
-		uri = URI.join(API_URL, "/user/login")
-		res = Net::HTTP.post_form URI(uri), 
+		# uri = URI.join(API_URL, "/user/login")
+		res = Net::HTTP.post_form URI(UriCreaterServices.create_uri("/user/login")), 
 			{"username" => "#{params[:username]}", "password" => "#{params[:password]}" }
 		#res = http.post(BASE_URL, user_params.to_query)
 		puts res.body if res.is_a?(Net::HTTPSuccess)
@@ -143,7 +169,8 @@ class UsersController < ApplicationController
 		if session["user"] 
 			id = @user["id"]
 			token = @user["auth_token"]
-			uri = URI.join(API_URL, "/user/#{id}")
+			uri = UriCreaterServices.create_uri("/user/#{id}")
+			# uri = URI.join(API_URL, "/user/#{id}")
 
 			req = Net::HTTP::Get.new(uri)
 			req['auth_token'] = token
