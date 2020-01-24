@@ -16,78 +16,79 @@
 	#  To output the responce and search the data
 	# debugger
 
+
+	# => puts '@@current_user'
+		# puts @@current_user
+		# puts '@current_user'
+		# puts @current_user
+
 class UsersController < ApplicationController
-
 	 before_action :set_user, only: [:edit, :update, :destroy, :show ]
-
-	#before_action :authenticate, except: [ :index, :new, :create ]
-
-
-
+	
 	def index
 		res = Net::HTTP.get_response(UriCreaterServices.create_uri("/users"))
 		@users = JSON.parse(res.body)
-		# puts UriCreater.uri
-		# puts @suggestion = UriCreater.new(text: "/users").call
-		# uri = URI.join(API_URL, "/users")
-		# res = Net::HTTP.get_response(uri)
-		# @users = JSON.parse(res.body)
-		# res = Net::HTTP.get('http://localhost:4000', '/users')
-		# req = Net::HTTP::Get.new(BASE_URL)
-		# res = Net::HTTP.start(BASE_URL.hostname) {|http|
-		#   http.request(req)
-		# }
-		# puts res.body if res.is_a?(Net::HTTPSuccess)	
-		# @users = JSON.parse(res.body)
-		#@user = user.to_hash
-		# puts @user.inspect
+		if res.is_a?(Net::HTTPSuccess)
+		   	flash[:alert] = 'User was successfully Listed.' 
+		else
+		  	flash[:alert] = "There is no user, Become the first"
+		end
 	end
-	
+		
+	# puts UriCreater.uri
+	# puts @suggestion = UriCreater.new(text: "/users").call
+	# uri = URI.join(API_URL, "/users")
+	# res = Net::HTTP.get_response(uri)
+	# @users = JSON.parse(res.body)
+	# res = Net::HTTP.get('http://localhost:4000', '/users')
+	# req = Net::HTTP::Get.new(BASE_URL)
+	# res = Net::HTTP.start(BASE_URL.hostname) {|http|
+	#   http.request(req)
+	# }
+	# puts res.body if res.is_a?(Net::HTTPSuccess)	
+	# @users = JSON.parse(res.body)
+	#@user = user.to_hash
+	# puts @user.inspect
+
 	def new
 	end
 
-	def create
+	# #res = Net::HTTP.post(BASE_URL, user_params.to_query)
+	# uri = URI.join(API_URL, "/users")
+	# res = Net::HTTP.post_form URI(UriCreaterServices.create_uri("/users")), 
+	# 	{"user[name]" => "#{params[:user][:name]}",
+	# 	 "user[username]" => "#{params[:user][:username]}", 
+	# 	 "user[password]" => "#{params[:user][:password]}", 
+	# 	 "user[password_confirmation]" => "#{params[:user][:password_confirmation]}" }
+	#res = http.post(BASE_URL, user_params.to_query)
 
+	def create
 		res = Net::HTTP.post_form(UriCreaterServices.create_uri("/users"),
 			 "user[name]" => "#{params[:user][:name]}",
 			 "user[username]" => "#{params[:user][:username]}", 
 			 "user[password]" => "#{params[:user][:password]}", 
 			 "user[password_confirmation]" => "#{params[:user][:password_confirmation]}")
-		# #res = Net::HTTP.post(BASE_URL, user_params.to_query)
-		# uri = URI.join(API_URL, "/users")
-
-		# res = Net::HTTP.post_form URI(UriCreaterServices.create_uri("/users")), 
-		# 	{"user[name]" => "#{params[:user][:name]}",
-		# 	 "user[username]" => "#{params[:user][:username]}", 
-		# 	 "user[password]" => "#{params[:user][:password]}", 
-		# 	 "user[password_confirmation]" => "#{params[:user][:password_confirmation]}" }
-		#res = http.post(BASE_URL, user_params.to_query)
 		puts res.body if res.is_a?(Net::HTTPSuccess)
-		JSON.parse(res.body)
-
-		render :login
-		#debugger
-
-
+	
+		if res.is_a?(Net::HTTPSuccess)
+		   	flash[:alert] = 'User was successfully registered, Please login here.' 
+		   	render :login
+		else
+		  	flash[:alert] = "There is no user, Become the first"
+		end
 	end
 
 
 	# Show User details from API 
 	def show
-
-		# There is no need to send the request to API, we can fetch details from session
-
-		# id = session["id"]
-		# token = session["auth_token"]
-		# uri = URI.join(API_URL, "/users/#{id}")
-
-		# req = Net::HTTP::Get.new(uri)
-		# req['auth_token'] = token
-		# res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-		#   http.request(req)
-		# }
-		# puts res.body if res.is_a?(Net::HTTPSuccess)
-		# @user = JSON.parse(res.body)
+		uri = UriCreaterServices.create_uri("/users/#{session[:user_id]}")
+		req = Net::HTTP::Get.new(uri)
+		req['auth_token'] = session[:auth_token]
+		res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+		  http.request(req)
+		}
+		puts res.body if res.is_a?(Net::HTTPSuccess)
+		@user = JSON.parse(res.body)
 
 
 		# 	puts params
@@ -100,13 +101,13 @@ class UsersController < ApplicationController
 	# 	Edit function to fetch info from API
 	# 	this OpenStruct.new method is need to be explored	
 	def edit
-		id = @user["id"]
-		token = @user["auth_token"]
-		puts uri = UriCreaterServices.create_uri("/users/#{id}") 
+		# id = @user["id"]
+		# token = @user["auth_token"]
+		puts uri = UriCreaterServices.create_uri("/users/#{session[:user_id]}") 
 		# uri URI.join(API_URL, "/users/#{id}")
 
 		req = Net::HTTP::Get.new(uri)
-		req['auth_token'] = token
+		req['auth_token'] = session[:auth_token]
 		res = Net::HTTP.start(uri.hostname, uri.port) {|http|
 		  http.request(req)
 		}
@@ -120,25 +121,23 @@ class UsersController < ApplicationController
 	
 
 	# Update Users name and username through API
-	def update
-		# id = @user["id"] 
-		token = @user["auth_token"]
-		uri = UriCreaterServices.create_uri("/users/#{id}")
+	def update	
+		uri = UriCreaterServices.create_uri("/users/#{session[:user_id]}")
 		req = Net::HTTP::Put.new(uri)
 		req.set_form_data("user[name]" => "#{params[:user][:name]}", "user[username]"  => "#{params[:user][:username]}")
-		req['auth_token'] = token
+		req['auth_token'] = session[:auth_token]
 		
 		res = Net::HTTP.start(uri.hostname, uri.port) do |http|
 		  http.request(req)
 		end
-		# puts res.body if res.is_a?(Net::HTTPSuccess)
-		# JSON.parse(res.body)
 
 		if res.is_a?(Net::HTTPSuccess)
+			flash[:alert] = 'User was successfully up dated.' 
 			session["user"]= JSON.parse(res.body)
 			@user= JSON.parse(res.body)
 			redirect_to action: 'show'
 		else
+			flash[:alert] = 'User is not updated.' 
 			render :edit
 		end
 	end
@@ -149,16 +148,13 @@ class UsersController < ApplicationController
 	end
 
 	def user_login
-		# uri = URI.join(API_URL, "/user/login")
 		res = Net::HTTP.post_form URI(UriCreaterServices.create_uri("/user/login")), 
 			{"username" => "#{params[:username]}", "password" => "#{params[:password]}" }
-		#res = http.post(BASE_URL, user_params.to_query)
 		puts res.body if res.is_a?(Net::HTTPSuccess)
-		session["user"]= JSON.parse(res.body)
 		@user= JSON.parse(res.body)
-		# puts "session"
-		puts session["user"]
-
+		puts session[:user_id] = @user["id"]
+		puts session[:auth_token] = @user["auth_token"]
+		flash[:alert] = 'Welcome back!!!.' 
 		redirect_to action: 'show'
 
 	end 
@@ -166,26 +162,22 @@ class UsersController < ApplicationController
 # To logout and destroy sesssion
 	
 	def destroy
-		if session["user"] 
-			id = @user["id"]
-			token = @user["auth_token"]
-			uri = UriCreaterServices.create_uri("/user/#{id}")
+		if session["user_id"] 
+			uri = UriCreaterServices.create_uri("/user/#{session["user_id"] }")
 			# uri = URI.join(API_URL, "/user/#{id}")
 
 			req = Net::HTTP::Get.new(uri)
-			req['auth_token'] = token
+			req['auth_token'] = session["auth_token"] 
 			res = Net::HTTP.start(uri.hostname, uri.port) {|http|
 			  http.request(req)
 			}
-
-			@user = nil
-			session["user"] = nil;
-			@user = nil
-
 			if res.is_a?(Net::HTTPSuccess)
+				reset_session
+				flash[:alert] = 'User was successfully Log out.' 
+				# @user = nil
 				render :login
 			else
-				render :edit
+				render :index
 			end
 
 		else
@@ -201,7 +193,7 @@ class UsersController < ApplicationController
 	# Set user based on login 
 	def set_user
       #@user = User.find(params[:id])
-       @user = session["user"] 
+       user = session[:user_id] 
     end
 
 	# Only autanticated params are allowed 
@@ -209,11 +201,6 @@ class UsersController < ApplicationController
 	def user_params
 		params.require(:user).permit(:name, :username,:password, :password_confirmation)
 	end
-
-	# def authenticate
-	# 	if session["user"]
-	# 		end
-	# end
 end	
 
 

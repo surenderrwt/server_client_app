@@ -33,6 +33,11 @@
         </ul>
       </div>
     </nav>
+
+  <% if flash[:alert] %>
+    <div class="notice"><%= flash[:alert] %></div>
+  <% end %>
+
     <div class="container">
         <div class="row">
 
@@ -45,16 +50,15 @@
 
 
 <br /><br /><br /><br /><br /><br /><br />
-<hr class="dotted">
+<hr>
   <div class="container">
     <div class="row">
-        <div class="footer" >
-          <%= debug session["user"] %>
-          <hr>
-          <%= debug @user %>
-        </div>
+      <div class="footer" >
+        <%=debug(@user) %> 
       </div>
     </div>
+  </div>
+  <hr>
 
   </body>
 </html>
