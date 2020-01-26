@@ -24,9 +24,11 @@
 
 class UsersController < ApplicationController
 	 before_action :set_user, only: [:edit, :update, :destroy, :show ]
+	 before_action :authanticate_user, only: [:edit, :update, :destroy, :show]
 	
 	def index
 		res = Net::HTTP.get_response(UriCreaterServices.create_uri("/users"))
+		# res = UriCreaterServices.create_uri("/users")
 		@users = JSON.parse(res.body)
 		if res.is_a?(Net::HTTPSuccess)
 		   	flash[:alert] = 'User was successfully Listed.' 
@@ -51,6 +53,9 @@ class UsersController < ApplicationController
 	# puts @user.inspect
 
 	def new
+		if session[:user_id]
+       		redirect_to :show
+       	end
 	end
 
 	# #res = Net::HTTP.post(BASE_URL, user_params.to_query)
@@ -145,6 +150,9 @@ class UsersController < ApplicationController
 
 # To create session 
 	def login
+		if session[:user_id]
+			redirect_to action: "show"
+		end
 	end
 
 	def user_login
@@ -192,8 +200,15 @@ class UsersController < ApplicationController
 
 	# Set user based on login 
 	def set_user
-      #@user = User.find(params[:id])
-       user = session[:user_id] 
+      	# @user = User.find(params[:id])
+       	user = session[:user_id] 
+    end
+
+	def authanticate_user
+      	#@user = User.find(params[:id])
+       	if !session[:user_id]
+       		redirect_to action: "login"
+       	end 
     end
 
 	# Only autanticated params are allowed 
