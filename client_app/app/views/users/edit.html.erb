@@ -1,15 +1,25 @@
+<%= form_for :user do |f| %>
+ 	<h1 class="h3 mb-3 font-weight-normal">Edit user</h1>
+	<div class="container">
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "name:"%></div>
+			<div class="col"><%=f.text_field :name, id: :user_name, class: "form-control", placeholder: "name" %></div>
+		</div>
 
- <%= form_for :user do |f| %>
-	<h1 class="h3 mb-3 font-weight-normal">Edit</h1>
-	<%=f.label :name, class: "sr-only"%>
-	<%=f.text_field :name, id: :user_name, class: "form-control", placeholder: "name" %>
-
-	<%=f.label :username, class: "sr-only"%>
-	<%=f.text_field :username, id: :user_username, class: "form-control", placeholder: "username" %>
-
-	<%= f.submit 'update' , class: "btn btn-lg btn-primary btn-block"%>
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "username:"%></div>
+			<div class="col"><%=f.text_field :username, id: :user_username, class: "form-control", placeholder: "username" %></div>
+		</div>
+		
+		<div class="row mb-2">
+			<div class="col"><%= f.submit 'update' , class: "btn btn-lg btn-primary btn-block"%></div>
+		</div>
+		
+		<div class="row mb-2">
+			<div class="col">
+				<%= link_to "Show details", show_path, class: "btn btn-primary"%>
+				<%= link_to "Logout", logout_path,  class: "btn btn-danger" %>
+			</div>
+		</div>
+	</div>
 <% end %>
-
-<br /><br /><br />
-<%= link_to "Show details", show_path, class: "btn btn-primary"%>
-<%= link_to "Logout", logout_path,  class: "btn btn-danger" %>

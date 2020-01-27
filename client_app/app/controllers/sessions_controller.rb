@@ -6,24 +6,23 @@ class SessionsController < ApplicationController
 	end
 
 	def create
-		res = Net::HTTP.post_form URI(UriCreaterServices.create_uri("/user/login")), 
-			{"username" => "#{params[:username]}", "password" => "#{params[:password]}" }
-		puts res.body if res.is_a?(Net::HTTPSuccess)
-		@user= JSON.parse(res.body)
-		puts session[:user_id] = @user["id"]
-		puts session[:auth_token] = @user["auth_token"]
-		flash[:alert] = 'Welcome back!!!.' 
-		redirect_to show_url(@user)
+		res = UriCreaterServices.login_user("/user/login", params)
+		if res.is_a?(Net::HTTPSuccess)
+			@user= JSON.parse(res.body)
+			puts session[:user_id] = @user["id"]
+			puts session[:auth_token] = @user["auth_token"]
+			flash[:alert] = 'Welcome back!!!.' 
+			redirect_to show_url(@user)
+		else
+			flash[:alert] = 'Username or password not mached'
+			redirect_to action: "new"
+		end
+
 	end
 
 	def logout
 		if session[:user_id]
-			uri = UriCreaterServices.create_uri("/logout/user/#{@user}")
-			req = Net::HTTP::Get.new(uri)
-			req['auth_token'] = session["auth_token"] 
-			res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-			  http.request(req)
-			}
+			res = UriCreaterServices.logout_user("/logout/user/#{@user}", session["auth_token"])
 			if res.is_a?(Net::HTTPSuccess)
 				reset_session
 				@user = nil

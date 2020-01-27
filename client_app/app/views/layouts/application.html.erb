@@ -1,69 +1,63 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ClientApp</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+    <head>
+        <title>ClientApp</title>
+        <%= csrf_meta_tags %>
+        <%= csp_meta_tag %>
 
-    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+        <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+        <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    </head>
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-       <%= link_to "Home", root_path, class: "navbar-brand "%>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <%= link_to "Home", root_path, class: "navbar-brand "%>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <%= link_to "Register", signup_path, class: "nav-link #{active_class(signup_path)}"%>
-          </li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <%= link_to "Register", signup_path, class: "nav-link #{active_class(signup_path)}"%>
+                    </li>
 
-          <li class="nav-item">
-            <%= link_to 'Login', login_path, class: "nav-link #{active_class(login_path)}"%>
-          </li>
+                    <li class="nav-item">
+                        <%= link_to 'Login', login_path, class: "nav-link #{active_class(login_path)}"%>
+                    </li>
 
-          <li class="nav-item">
-            <%= link_to "Edit", edit_path, class: "nav-link #{active_class(edit_path)}"%>
-          </li>
-          <li class="nav-item">
-            <%= link_to 'Logout', logout_path, class: "nav-link #{active_class(logout_path)}"%>
-          </li>
+                    <li class="nav-item">
+                        <%= link_to "Edit", edit_path, class: "nav-link #{active_class(edit_path)}"%>
+                    </li>
+                    <li class="nav-item">
+                        <%= link_to 'Logout', logout_path, class: "nav-link #{active_class(logout_path)}"%>
+                    </li>
+                    
+                </ul>
+            </div>
+        </nav>
+
+        <% if flash[:alert] %>
+            <div class="notice"><%= flash[:alert] %></div>
+        <% end %>
         
-        </ul>
-      </div>
-    </nav>
-
-  <% if flash[:alert] %>
-    <div class="notice"><%= flash[:alert] %></div>
-  <% end %>
-
-    <div class="container">
-        <div class="row">
-
-    <div class="text-center offset-md-3">
-        <%= yield %>
-    </div>
-    </div>
-</div>
-
-
-
-<br /><br /><br /><br /><br /><br /><br />
-<hr>
-  <div class="container">
-    <div class="row">
-      <div class="footer" >
-        <%=debug(@user) %> 
-        <%=debug(session[:user]) %> 
-        <%=debug(session["user"]) %> 
-      </div>
-    </div>
-  </div>
-  <hr>
-
-  </body>
+        <div class="container">
+            <div class="row">
+                <div class="text-center offset-md-3">
+                    <%= yield %>
+                </div>
+            </div>
+        </div>
+        
+        <br /><br /><br /><br /><br /><br /><br />
+        <hr>
+        <div class="container">
+            <div class="row">
+                <div class="footer" >
+                    <%=debug(@user) %> 
+                </div>
+            </div>
+        </div>
+        <hr>
+    </body>
 </html>
