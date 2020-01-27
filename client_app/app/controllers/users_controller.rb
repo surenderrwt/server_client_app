@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
 	before_action :set_user, except: [:new, :create]
+	before_action :authenticate_access, only: [:new, :create]
 	
 	# Registration form  	
 	def new
@@ -57,7 +58,6 @@ class UsersController < ApplicationController
 		end
 
 		if res.is_a?(Net::HTTPSuccess)
-			reset_session
 			flash[:alert] = 'User was successfully updated.' 
 			redirect_to action: 'show'
 		else
@@ -69,6 +69,11 @@ class UsersController < ApplicationController
 
 	private
 
+	def authenticate_access
+		if session[:user_id]
+			redirect_to controller: "users", action: "show" 
+		end
+	end
 
 	def user_params
 		params.require(:user).permit(:name, :username,:password, :password_confirmation)

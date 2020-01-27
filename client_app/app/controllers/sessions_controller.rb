@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
-	# before_action :authenticate_access, only: [:new, :create ]
+	before_action :set_user, only: [:logout]
+	before_action :authenticate_access, only:[:new, :create]
 
 	def new
 	end
@@ -40,13 +41,11 @@ class SessionsController < ApplicationController
 
 	private
 
-	# def authenticate_access
-	# 	if session[:user_id]
-	# 		redirect_to controller: "users", action: "show"
-	# 	else
-	# 		redirect_to controller: "sessions", action: :new
-	# 	end
-	# end
+	def authenticate_access
+		if session[:user_id]
+			redirect_to controller: "users", action: "show" 
+		end
+	end
 
 	def user_params
       	params.permit(:username, :password)
