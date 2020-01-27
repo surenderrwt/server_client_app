@@ -1,43 +1,32 @@
-<!-- 
-<form class="form-signin">
-
-	<!-- <img class="mb-4" src="/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> 
-	<h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
-	<label for="inputEmail" class="sr-only">Name</label>
-	<input type="text" id="inputEmail" class="form-control" placeholder="Name" required="" autofocus="">
-	<label for="inputPassword" class="sr-only">Username</label>
-	<input type="text" id="inputPassword" class="form-control" placeholder="Username" required="">
-	<label for="inputPassword" class="sr-only">Password</label>
-	<input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-	<label for="inputPassword" class="sr-only">Password_confirmation</label>
-	<input type="password" id="inputPassword" class="form-control" placeholder="Password_confirmation" required="">
-  	<button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-</form>
- -->
-
 <%= form_with url: signup_path, local: true, method: :post, class: "form-signin"  do |f| %>
-	<h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
-	Name : 
-	<%=text_field(:user,:name) %>
-	<br />
+	<h1 class="h3 mb-3 font-weight-normal">Registration page</h1>
+	<div class="container">
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "Name" %></div>
+			<div class="col"><%=text_field(:user,:name) %></div>
+		</div>
 
-	username: <%=text_field(:user, :username) %>
-<br />
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "Username" %></div>
+			<div class="col"><%=text_field(:user, :username) %></div>
+		</div>
 
-	password: 
-	<%=password_field(:user, :password) %>
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "Password" %></div>
+			<div class="col"><%=password_field(:user, :password) %></div>
+		</div>
 
-<br />
-	password_confirm:
-	<%=password_field(:user, :password_confirmation) %>
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "Password Confirmation" %></div>
+			<div class="col"><%=password_field(:user, :password_confirmation) %></div>
+		</div>
 
-	<%= f.submit 'sign up' , class: "btn btn-lg btn-primary btn-block"%>
+		<div class="row mb-2">
+			<div class="col"><%= f.submit 'sign up' , class: "btn btn-lg btn-primary btn-block"%></div>
+		</div>
+
+		<div class="row">
+			<p> Have registered already!!! <%= link_to "yes, get login", login_path %> now</p>
+		</div>
+	</div>	
 <% end %>
-
-
-<br />
-
-<div class="row">
-
-Have registed already!!! <%= link_to "yes, get login", signin_path, class: "" %> now
-</div>
