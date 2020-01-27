@@ -19,14 +19,14 @@ class SessionsController < ApplicationController
       	    response.headers["auth_token"] = nil
             render status: 200, :json => {:message => "success"}.to_json
         else
-            render status: 400, :json => {:status => "Unauthorized Access"}.to_json
+            render status: 400, :json => {:status => "Unauthorized access"}.to_json
         end    
     end
 
     private
 
     def generate_token
-      		key = "Learining ruby on rails"
+      	key = "Learining ruby on rails"
     		data = params[:password]
     		return mac = OpenSSL::HMAC.hexdigest("SHA256", key, data)
     end
