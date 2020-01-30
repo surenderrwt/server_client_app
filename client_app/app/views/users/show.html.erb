@@ -1,0 +1,17 @@
+<div class="container">
+	<div class="row mb-2">
+		<div class="col"><%= label_tag "Name" %></div>
+		<div class="col"><%= @user['name'] %></div>
+	</div>
+
+	<div class="row mb-2">
+		<div class="col"><%= label_tag "Username" %></div>
+		<div class="col"><%= @user['username'] %></div>
+	</div>
+	
+	<div class="row mb-2">
+		<div class="col col-md-6"><%= link_to "edit", edit_path, class: "btn btn-primary" %></div>
+		<div class="col col-md-6"><%= link_to "Logout", logout_path,  class: "btn btn-danger" %></div>
+	</div>	
+</div>
+

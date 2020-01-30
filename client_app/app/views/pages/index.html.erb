@@ -1,0 +1,16 @@
+<H1 class="text-center"> Welcome to Board </H1>
+
+<div class="container">
+	<div class="row">
+		<div class="col">ID</div>
+		<div class="col">Name</div>
+		<div class="col">Username</div>
+	</div>
+	<% @users.each do |user| %>
+		<div class="row">
+			<div class="col col-md-3"><%= user["id"] %> </div>
+			<div class="col col-md-3"><%= user["name"] %> </div>
+			<div class="col col-md-3"><%= user["username"] %> </div>
+		</div>
+	<% end %>
+</div>

@@ -1,0 +1,32 @@
+<%= form_with url: signup_path, local: true, method: :post, class: "form-signin"  do |f| %>
+	<h1 class="h3 mb-3 font-weight-normal">Registration page</h1>
+	<div class="container">
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "Name" %></div>
+			<div class="col"><%=text_field(:user,:name) %></div>
+		</div>
+
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "Username" %></div>
+			<div class="col"><%=text_field(:user, :username) %></div>
+		</div>
+
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "Password" %></div>
+			<div class="col"><%=password_field(:user, :password) %></div>
+		</div>
+
+		<div class="row mb-2">
+			<div class="col"><%= label_tag "Password Confirmation" %></div>
+			<div class="col"><%=password_field(:user, :password_confirmation) %></div>
+		</div>
+
+		<div class="row mb-2">
+			<div class="col"><%= f.submit 'sign up' , class: "btn btn-lg btn-primary btn-block"%></div>
+		</div>
+
+		<div class="row">
+			<p> Have registered already!!! <%= link_to "yes, get login", login_path %> now</p>
+		</div>
+	</div>	
+<% end %>
